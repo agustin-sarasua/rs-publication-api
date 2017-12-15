@@ -1,0 +1,43 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: rs-publication-api
+  labels:
+    app: rs-publication-api
+    tier: backend-api
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: rs-publication-api
+        tier: backend-api
+    spec:
+      containers:
+      - name: rs-publication-api
+        image: gcr.io/real-estate-186513/rs-catalog-api:v1
+        command: ["rs-publication-api"]
+        # This setting makes nodes pull the docker image every time before
+        # starting the pod. This is useful when debugging, but should be turned
+        # off in production.
+        imagePullPolicy: IfNotPresent
+        ports:
+        - name: http-server
+          containerPort: 8080
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: rs-publication-api
+  labels:
+    app: rs-publication-api
+    tier: frontend
+spec:
+  type: NodePort
+  ports:
+  -  port: 8080
+     protocol: TCP
+     targetPort: http-server
+  selector:
+    app: rs-publication-api
+    tier: backend-api
