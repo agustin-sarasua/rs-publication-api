@@ -14,6 +14,7 @@ func main() {
 	router.HandleFunc("/publication", app.CreatePublicationEndpoint).Methods("POST")
 	router.HandleFunc("/publication/{id:[0-9]+}", app.GetPublicationEndpoint).Methods("GET")
 
+	router.HandleFunc("/publication/_search", app.SearchPublicationEndpoint).Methods("GET").Queries("t", "t")
 	fmt.Println("Hello there")
 	log.Fatal(http.ListenAndServe(":8080", router))
 }
