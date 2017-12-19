@@ -34,5 +34,4 @@ func SearchPublicationEndpoint(w http.ResponseWriter, req *http.Request) {
 			json.NewEncoder(w).Encode(SearchResutlDTO{items: ps})
 		}
 	}
-
 }
