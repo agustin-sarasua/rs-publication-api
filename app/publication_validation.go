@@ -20,5 +20,3 @@ func validatePublication(p *m.Publication) []error {
 	return errs
 }
 
-func testValidatePublication(t *testing.T) {
-}
