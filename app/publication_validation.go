@@ -1,8 +1,6 @@
 package app
 
 import (
-	"testing"
-
 	c "github.com/agustin-sarasua/rs-common"
 	m "github.com/agustin-sarasua/rs-model"
 )
@@ -19,4 +17,3 @@ func validatePublication(p *m.Publication) []error {
 
 	return errs
 }
-

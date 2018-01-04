@@ -11,6 +11,8 @@ import (
 
 func main() {
 	router := mux.NewRouter()
+
+	router.HandleFunc("/publication", app.LoadUserPublicationEndpoint).Methods("GET")
 	router.HandleFunc("/publication", app.CreatePublicationEndpoint).Methods("POST")
 	router.HandleFunc("/publication/{id:[0-9]+}", app.GetPublicationEndpoint).Methods("GET")
 
