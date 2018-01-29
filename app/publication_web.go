@@ -8,8 +8,14 @@ import (
 	"strings"
 	"time"
 
+	"cloud.google.com/go/storage"
 	c "github.com/agustin-sarasua/rs-common"
 	m "github.com/agustin-sarasua/rs-model"
+)
+
+var (
+	StorageBucket     *storage.BucketHandle
+	StorageBucketName string
 )
 
 func LoadUserPublicationEndpoint(w http.ResponseWriter, req *http.Request) {
@@ -57,4 +63,27 @@ func SearchPublicationEndpoint(w http.ResponseWriter, req *http.Request) {
 			json.NewEncoder(w).Encode(SearchResutlDTO{items: ps})
 		}
 	}
+}
+
+func UploadHandler(rw http.ResponseWriter, r *http.Request) {
+	if r.Method != "POST" {
+		http.Error(rw, "", http.StatusMethodNotAllowed)
+		return
+	}
+
+	f, fh, err := r.FormFile("file")
+
+	if err == http.ErrMissingFile {
+		return
+	}
+	if err != nil {
+		return
+	}
+
+	nc := PushImageToCloudStorage(f, fh)
+	n := <-nc
+
+	const publicURL = "https://storage.googleapis.com/%s/%s"
+
+	fmt.Fprintf(rw, fmt.Sprintf(publicURL, StorageBucketName, n))
 }
